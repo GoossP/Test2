@@ -1,17 +1,28 @@
 package tasks.first.components;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-public class Main {
-    public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
+import org.bytedeco.javacv.*;
+import org.bytedeco.opencv.global.opencv_imgcodecs;
+import org.bytedeco.opencv.opencv_core.IplImage;
+
+import javax.swing.*;
+
+import static org.bytedeco.opencv.helper.opencv_imgcodecs.cvSaveImage;
+
+public class Main {
+    public static void main(String[] args) throws FrameGrabber.Exception {
+        FrameGrabber grabber = new OpenCVFrameGrabber(0);
+        grabber.start();
+        Frame frame = grabber.grab();
+        CanvasFrame canvasFrame = new CanvasFrame("Frame");
+
+        while(true) {
+            OpenCVFrameConverter.ToIplImage converter = new OpenCVFrameConverter.ToIplImage();
+            IplImage image = converter.convert(frame);
+            frame = grabber.grab();
+            canvasFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            canvasFrame.showImage(frame);
         }
+
     }
 }
